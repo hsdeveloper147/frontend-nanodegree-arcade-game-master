@@ -30,7 +30,7 @@ Enemy.prototype.randSpeed = function() {
     //Calculating random speed
     var minSpeed = 200;
     this.speed = Math.floor(Math.random() * 500 + minSpeed);
-}
+};
 
 
 // Update the enemy's position, required method for game
@@ -114,26 +114,26 @@ Player.prototype.reset = function() {
     this.setX(2*COL_WIDTH);
     this.setY(5*ROW_WIDTH);
     SCORE = 0;
-}
+};
 
 
 // getter and setter functions
 
 Player.prototype.getX = function() {
     return this.x;
-}
+};
 
 Player.prototype.getY = function() {
     return this.y;
-}
+};
 
 Player.prototype.setX = function(val) {
      this.x = val;
-}
+};
 
 Player.prototype.setY = function(val) {
      this.y = val;
-}
+};
 
 //code to display score
 Player.prototype.displaySocre = function() {
@@ -142,7 +142,7 @@ Player.prototype.displaySocre = function() {
     ctx.fillStyle = "blue";
     ctx.clearRect(0,0,200,50);
     ctx.fillText("Score -> " + SCORE,80,40);
-}
+};
 
 
 //*****handle input function
