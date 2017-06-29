@@ -8,29 +8,28 @@ var SCORE = 0;
 var Enemy = function() {
     this.sprite = 'images/enemy-bug.png';
     // init value is a function that initialises the values
-    initValues.call(this);
+    this.initValues();
 };
 
-var initValues = function() {
+Enemy.prototype.initValues = function() {
         this.x = -ROW_WIDTH;
         //calculating random values for y and speed
-        this.y = randY();
-        this.speed = randSpeed();
+        this.randY();
+        this.randSpeed();
 
-}
+};
 //function for cacluating random y coordinate for enemy
-var randY = function() {
+Enemy.prototype.randY = function() {
     //Calculating random row (y-coord) for enemy
     var rand = Math.floor((Math.random() * 3)+1);
-    var y = rand * ROW_WIDTH;
-    return y;
-}
+    this.y = rand * ROW_WIDTH;
 
-var randSpeed = function() {
+};
+
+Enemy.prototype.randSpeed = function() {
     //Calculating random speed
     var minSpeed = 200;
-    var speed = Math.floor(Math.random() * 500 + minSpeed);
-    return speed;
+    this.speed = Math.floor(Math.random() * 500 + minSpeed);
 }
 
 
@@ -43,20 +42,14 @@ Enemy.prototype.update = function(dt) {
         this.x += this.speed*dt;
     else {
         // if enemy crosses rhight boundry ... randomise the x,y and speed values
-        initValues.call(this);
+        this.initValues();
     }
 
     // Detecting collision with player
     if(this.x >= player.getX() && this.x < (player.getX() + COL_WIDTH) && this.y == player.getY()) {
-        reset();
+        player.reset();
     }
 };
-
-var reset = function() {
-    player.setX(2*COL_WIDTH);
-    player.setY(5*ROW_WIDTH);
-    SCORE = 0;
-}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -64,6 +57,8 @@ Enemy.prototype.render = function() {
 };
 
 
+
+//Player
 var Player = function(x,y) {
     this.x = x;
     this.y = y;
@@ -87,8 +82,8 @@ Player.prototype.update = function(dt) {
     //Checking if player comes to river -- WIN CONDITION
     else if(this.y < ROW_WIDTH){
         console.log("yes");
-        player.setX(2*COL_WIDTH);
-        player.setY(5*ROW_WIDTH);
+        this.setX(2*COL_WIDTH);
+        this.setY(5*ROW_WIDTH);
         SCORE++;
     }
 
@@ -99,10 +94,27 @@ Player.prototype.render = function() {
     var image = Resources.get(this.sprite);
    // alert(image.width);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-
-    displaySocre();
+    this.displaySocre();
 
 };
+
+// Instantiation of objects.
+var enemy1 = new Enemy();
+var enemy2 = new Enemy();
+var enemy3 = new Enemy();
+var allEnemies = [];
+allEnemies.push(enemy1);
+allEnemies.push(enemy2);
+allEnemies.push(enemy3);
+
+var player = new Player(2*COL_WIDTH,5*ROW_WIDTH);
+
+//restting the player's position and score
+Player.prototype.reset = function() {
+    this.setX(2*COL_WIDTH);
+    this.setY(5*ROW_WIDTH);
+    SCORE = 0;
+}
 
 
 // getter and setter functions
@@ -124,7 +136,7 @@ Player.prototype.setY = function(val) {
 }
 
 //code to display score
-var displaySocre = function() {
+Player.prototype.displaySocre = function() {
     ctx.textAlign ="center";
     ctx.font = '24pt serif';
     ctx.fillStyle = "blue";
@@ -150,7 +162,7 @@ Player.prototype.handleInput = function(input) {
             break;
     }
     //update function checks the boundry conditions and collisions with enemy
-    player.update();
+    this.update();
 };
 
 // This listens for key presses and sends the keys to your
@@ -166,15 +178,6 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
-// Instantiation of objects.
-var enemy1 = new Enemy();
-var enemy2 = new Enemy();
-var enemy3 = new Enemy();
-var allEnemies = [];
-allEnemies.push(enemy1);
-allEnemies.push(enemy2);
-allEnemies.push(enemy3);
 
-var player = new Player(2*COL_WIDTH,5*ROW_WIDTH);
 
 
